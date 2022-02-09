@@ -1,28 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
+import { UserLoginDto } from './dto/user-login.dto';
+import { UserInfo } from './user-info';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    const { name, password } = createUserDto;
+  async createUser(createUserDto: CreateUserDto): Promise<void> {
+    const { name, email, password } = createUserDto;
 
-    return `This action adds a new user, name: ${name}, password: ${password}`;
+    Logger.debug(
+      `This action adds a new user, 
+      name: ${name}, email: ${email}, password: ${password}`,
+    );
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async verifyEmail(verifyEmailDto: VerifyEmailDto): Promise<string> {
+    const { signupVerifyToken } = verifyEmailDto;
+    Logger.debug(`${signupVerifyToken}`);
+    return;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async login(userLoginDto: UserLoginDto): Promise<string> {
+    const { email, password } = userLoginDto;
+
+    Logger.debug(`${email}, ${password}`);
+    return;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async getUserInfo(userId: string): Promise<string> {
+    Logger.debug(`${userId}`);
+    return;
   }
 
-  remove(id: number) {
+  async removeUser(id: number) {
     return `This action removes a #${id} user`;
   }
 }
