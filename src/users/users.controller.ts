@@ -7,13 +7,14 @@ import {
   Param,
   Delete,
   Query,
+  Scope,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 
-@Controller('users')
+@Controller({ path: 'users', scope: Scope.DEFAULT })
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
