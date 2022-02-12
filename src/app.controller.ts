@@ -6,7 +6,11 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
+  getHello(): Promise<string> {
     return this.appService.getHello();
+  }
+  @Get('/db-host-from-config')
+  getDatabaseHostFromConfigService(): Promise<string> {
+    return this.appService.getDatabaseHostFromConfigService();
   }
 }
