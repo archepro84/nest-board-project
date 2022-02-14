@@ -8,6 +8,7 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 
 import * as express from 'express';
+import { ValidationPipe } from './users/validationPipe';
 
 const binaryMimeTypes: string[] = [];
 
@@ -20,6 +21,7 @@ async function bootstrapServer(): Promise<Server> {
       AppModule,
       new ExpressAdapter(expressApp),
     );
+    nestApp.useGlobalPipes(new ValidationPipe());
     nestApp.use(eventContext());
     await nestApp.init();
     cachedServer = createServer(expressApp, undefined, binaryMimeTypes);

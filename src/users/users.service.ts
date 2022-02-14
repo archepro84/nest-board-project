@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
-import * as uuid from 'uuid';
 import { EmailService } from '../email/email.service';
 
 @Injectable()
@@ -17,12 +16,12 @@ export class UsersService {
       name: ${name}, email: ${email}, password: ${password}`,
     );
 
-    await this.checkUserExists(email);
-
-    const signupVerifyToken = uuid.v1();
-
-    await this.saveUser(createUserDto, signupVerifyToken);
-    await this.sendMemberJoinEmail(email, signupVerifyToken);
+    // await this.checkUserExists(email);
+    //
+    // const signupVerifyToken = uuid.v1();
+    //
+    // await this.saveUser(createUserDto, signupVerifyToken);
+    // await this.sendMemberJoinEmail(email, signupVerifyToken);
   }
 
   async checkUserExists(email: string) {
@@ -56,7 +55,7 @@ export class UsersService {
     return;
   }
 
-  async getUserInfo(userId: string): Promise<string> {
+  async getUserInfo(userId: number): Promise<string> {
     Logger.debug(`${userId}`);
     throw new Error('Method·not·implemented.');
     return;
