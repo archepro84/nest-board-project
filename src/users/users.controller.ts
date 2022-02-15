@@ -8,12 +8,12 @@ import {
   Query,
   Scope,
   ParseIntPipe,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
-import { ValidationPipe } from './validationPipe';
 
 @Controller({ path: 'users', scope: Scope.DEFAULT })
 export class UsersController {
