@@ -8,7 +8,7 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 
 import * as express from 'express';
-import { ValidationPipe } from './users/validationPipe';
+import { ValidationPipe } from '@nestjs/common';
 
 const binaryMimeTypes: string[] = [];
 
