@@ -6,6 +6,7 @@ import { EmailModule } from './email/email.module';
 import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
 import { validationSchema } from './config/validationSchema';
 import emailConfig from './config/emailConfig';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 const configModuleOption: ConfigModuleOptions = {
   envFilePath: [`${__dirname}/config/env/.${process.env.NODE_ENV}.env`],
@@ -15,7 +16,12 @@ const configModuleOption: ConfigModuleOptions = {
 };
 
 @Module({
-  imports: [ConfigModule.forRoot(configModuleOption), UsersModule, EmailModule],
+  imports: [
+    ConfigModule.forRoot(configModuleOption),
+    TypeOrmModule.forRoot(),
+    UsersModule,
+    EmailModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

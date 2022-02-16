@@ -23,7 +23,7 @@ export class UsersController {
   createUser(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<void> {
-    return this.usersService.createUser(createUserDto);
+    return this.usersService.createUser(createUserDto, null);
   }
 
   @Post(`/email-verify`)

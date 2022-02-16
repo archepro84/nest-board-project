@@ -1,35 +1,46 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { EmailService } from '../email/email.service';
+import { UsersRepository } from './users.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ulid } from 'ulid';
 
 @Injectable()
 export class UsersService {
-  constructor(private emailService: EmailService) {}
+  constructor(
+    @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
+    private emailService: EmailService,
+  ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<void> {
-    const { name, email, password } = createUserDto;
+  async createUser(
+    createUserDto: CreateUserDto,
+    signupVerifyToken: string,
+  ): Promise<void> {
+    const { email } = createUserDto;
 
-    Logger.debug(
-      `This action adds a new user, 
-      name: ${name}, email: ${email}, password: ${password}`,
+    const userExist = await this.checkUserExists(email);
+    if (userExist) {
+      throw new UnprocessableEntityException(
+        '해당 이메일로는 가입할 수 없습니다.',
+      );
+    }
+
+    return this.usersRepository.saveUser(
+      createUserDto,
+      signupVerifyToken ? signupVerifyToken : ulid(),
     );
-
-    // await this.checkUserExists(email);
-    //
-    // const signupVerifyToken = uuid.v1();
-    //
-    // await this.saveUser(createUserDto, signupVerifyToken);
-    // await this.sendMemberJoinEmail(email, signupVerifyToken);
   }
 
-  async checkUserExists(email: string) {
-    return false;
-  }
+  async checkUserExists(emailAddress: string): Promise<boolean> {
+    const user = await this.usersRepository.checkUserExists(emailAddress);
 
-  async saveUser(createUserDto: CreateUserDto, signupVerifyToken: string) {
-    return;
+    return user !== undefined;
   }
 
   private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
