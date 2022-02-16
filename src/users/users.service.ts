@@ -31,7 +31,7 @@ export class UsersService {
       );
     }
 
-    return this.usersRepository.saveUser(
+    return this.usersRepository.saveUserUsingTransaction(
       createUserDto,
       signupVerifyToken ? signupVerifyToken : ulid(),
     );
