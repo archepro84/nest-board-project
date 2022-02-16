@@ -6,7 +6,6 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
-import { EmailService } from '../email/email.service';
 import { UsersRepository } from './users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ulid } from 'ulid';
@@ -15,7 +14,6 @@ import { ulid } from 'ulid';
 export class UsersService {
   constructor(
     @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
-    private emailService: EmailService,
   ) {}
 
   async createUser(
@@ -41,13 +39,6 @@ export class UsersService {
     const user = await this.usersRepository.checkUserExists(emailAddress);
 
     return user !== undefined;
-  }
-
-  private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
-    await this.emailService.sendMemberJoinVerification(
-      email,
-      signupVerifyToken,
-    );
   }
 
   async verifyEmail(verifyEmailDto: VerifyEmailDto): Promise<string> {
