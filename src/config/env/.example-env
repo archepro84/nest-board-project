@@ -9,3 +9,4 @@ DB_USER=pass
 DB_PASSWORD=pass
 DB_SCHEMA=pass
 DB_SYNCHRONIZE=pass
+JWT_SECRET=pass
