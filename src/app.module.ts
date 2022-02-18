@@ -17,6 +17,8 @@ import {
   LoggerMiddleware,
 } from './logger/logger.middleware';
 import { UsersController } from './users/users.controller';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
 
 const configModuleOption: ConfigModuleOptions = {
   envFilePath: [`${__dirname}/config/env/.${process.env.NODE_ENV}.env`],
@@ -25,15 +27,19 @@ const configModuleOption: ConfigModuleOptions = {
   validationSchema,
 };
 
+const customGuard = {
+  provide: APP_GUARD,
+  useClass: AuthGuard,
+};
+
 @Module({
   imports: [
     ConfigModule.forRoot(configModuleOption),
     TypeOrmModule.forRoot(),
     UsersModule,
-    EmailModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, customGuard],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
