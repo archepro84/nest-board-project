@@ -9,16 +9,20 @@ import {
   Scope,
   ParseIntPipe,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
+// @UseGuards(AuthGuard)
 @Controller({ path: 'users', scope: Scope.DEFAULT })
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   createUser(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
@@ -27,7 +31,7 @@ export class UsersController {
   }
 
   @Post(`/email-verify`)
-  verifyEmail(@Query() dto: VerifyEmailDto): Promise<string> {
+  verifyEmail(@Query() dto: VerifyEmailDto) {
     return this.usersService.verifyEmail(dto);
   }
 

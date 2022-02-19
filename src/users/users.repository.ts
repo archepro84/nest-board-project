@@ -2,6 +2,7 @@ import { Connection, EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ulid } from 'ulid';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
@@ -29,6 +30,13 @@ export class UsersRepository extends Repository<UserEntity> {
 
   async checkUserExists(emailAddress: string): Promise<UserEntity> {
     const user = await this.findOne({ email: emailAddress });
+
+    return user;
+  }
+
+  async verifyEmail(verifyEmailDto: VerifyEmailDto): Promise<UserEntity> {
+    const { signupVerifyToken } = verifyEmailDto;
+    const user = this.findOne({ signupVerifyToken });
 
     return user;
   }
