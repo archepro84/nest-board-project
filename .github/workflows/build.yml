@@ -2,21 +2,31 @@ name: nest-board-project-master-action
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, main, actions ]
     paths-ignore:
       - '.gitignore'
       - '.dockerignore'
       - 'README.md'
   pull_request:
-    branches: [ master ]
+    branches: [ master, main, actions ]
 
 jobs:
   check-bats-version:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      - name: install node modules
+        run: npm install
+      - name: build
+        run: npx serverless deploy
