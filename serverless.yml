@@ -18,5 +18,5 @@ functions:
     events:
       - http:
           method: ANY
-          path: /{any+}
+          path: /
 
