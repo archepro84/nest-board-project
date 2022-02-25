@@ -11,7 +11,7 @@ on:
     branches: [ master, main, actions ]
 
 jobs:
-  check-bats-version:
+  nestjs-serverless-deploy:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
