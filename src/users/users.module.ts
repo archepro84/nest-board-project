@@ -5,6 +5,13 @@ import { EmailModule } from '../email/email.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersRepository } from './users.repository';
 import { AuthModule } from '../auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { ClassRolesGuard, HandlerRolesGuard } from './users.guard';
+
+const handlerRolesGuardProvider = {
+  provide: APP_GUARD,
+  useClass: HandlerRolesGuard,
+};
 
 @Module({
   imports: [
@@ -13,6 +20,6 @@ import { AuthModule } from '../auth/auth.module';
     AuthModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, handlerRolesGuardProvider],
 })
 export class UsersModule {}

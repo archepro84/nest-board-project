@@ -1,4 +1,5 @@
 import {
+  Body,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
@@ -40,6 +41,10 @@ export class UsersService {
       createUserDto,
       signupVerifyToken ? signupVerifyToken : ulid(),
     );
+  }
+
+  async createUserAdmin(createUserDto: CreateUserDto) {
+    return true;
   }
 
   async sendMemberJoinEmail(

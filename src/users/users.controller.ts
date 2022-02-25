@@ -13,6 +13,7 @@ import {
   UseGuards,
   Logger,
   Request,
+  SetMetadata,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,7 +22,7 @@ import { UserLoginDto } from './dto/user-login.dto';
 import { AuthService } from '../auth/auth.service';
 import { UserInfo } from './user-info';
 import { AuthGuard } from '../auth/auth.guard';
-import { User, UserData } from '../utils/decorators/users-transform';
+import { UserData, UserRoles } from '../utils/decorators/users-transform';
 
 interface User {
   name: string;
@@ -39,6 +40,13 @@ export class UsersController {
   createUser(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<void> {
+    return this.usersService.createUser(createUserDto, null);
+  }
+
+  @Post('/admin')
+  @UserRoles('user')
+  @UserRoles('admin')
+  createUserAdmin(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto, null);
   }
 

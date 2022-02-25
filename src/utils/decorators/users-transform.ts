@@ -8,6 +8,7 @@ import {
   createParamDecorator,
   ExecutionContext,
   Logger,
+  SetMetadata,
 } from '@nestjs/common';
 
 export function NotIn(property: string, validationOptions?: ValidationOptions) {
@@ -59,3 +60,5 @@ export const UserData = createParamDecorator<string>(
     return data ? user?.[data] : user;
   },
 );
+
+export const UserRoles = (...roles: string[]) => SetMetadata('roles', roles);
