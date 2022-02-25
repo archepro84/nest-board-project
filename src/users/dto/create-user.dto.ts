@@ -5,22 +5,15 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
 import { BadRequestException } from '@nestjs/common';
-import { NotIn } from './users-transform';
-
-function createUserNameTransform(params) {
-  const { value, obj } = params;
-  if (obj.password.includes(value.trim())) {
-    throw new BadRequestException(
-      'password는 name과 같은 문자열을 포함할 수 없습니다.',
-    );
-  }
-  return value.trim();
-}
+import {
+  createUserNameTransform,
+  NotIn,
+} from 'src/utils/decorators/users-transform';
+import { Transform } from 'class-transformer';
 
 export class CreateUserDto {
-  // @Transform(createUserNameTransform)
+  @Transform(createUserNameTransform)
   @NotIn('password', {
     message: 'password는 name과 같은 문자열을 포함할 수 없습니다.',
   })
