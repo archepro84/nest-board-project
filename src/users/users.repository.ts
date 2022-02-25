@@ -3,6 +3,7 @@ import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ulid } from 'ulid';
 import { VerifyEmailDto } from './dto/verify-email.dto';
+import { UserLoginDto } from './dto/user-login.dto';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {
@@ -36,7 +37,14 @@ export class UsersRepository extends Repository<UserEntity> {
 
   async verifyEmail(verifyEmailDto: VerifyEmailDto): Promise<UserEntity> {
     const { signupVerifyToken } = verifyEmailDto;
-    const user = this.findOne({ signupVerifyToken });
+    const user = await this.findOne({ signupVerifyToken });
+
+    return user;
+  }
+
+  async login(userLoginDto: UserLoginDto): Promise<UserEntity> {
+    const { email, password } = userLoginDto;
+    const user = await this.findOne({ email, password });
 
     return user;
   }

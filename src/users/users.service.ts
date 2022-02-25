@@ -11,12 +11,14 @@ import { UsersRepository } from './users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ulid } from 'ulid';
 import { EmailService } from '../email/email.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private emailService: EmailService,
     @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
+    private authService: AuthService,
   ) {}
 
   async createUser(
@@ -32,9 +34,21 @@ export class UsersService {
       );
     }
 
-    return this.usersRepository.saveUserUsingTransaction(
+    await this.sendMemberJoinEmail(email, signupVerifyToken);
+
+    await this.usersRepository.saveUserUsingTransaction(
       createUserDto,
       signupVerifyToken ? signupVerifyToken : ulid(),
+    );
+  }
+
+  async sendMemberJoinEmail(
+    email: string,
+    signupVerifyToken: string,
+  ): Promise<void> {
+    await this.emailService.sendMemberJoinVerification(
+      email,
+      signupVerifyToken,
     );
   }
 
@@ -51,19 +65,25 @@ export class UsersService {
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
 
-    // return this.authService.login({
-    //   id: user.id,
-    //   name: user.name,
-    //   email: user.email,
-    // });
+    return this.authService.login({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    });
   }
 
   async login(userLoginDto: UserLoginDto): Promise<string> {
-    const { email, password } = userLoginDto;
+    const user = await this.usersRepository.login(userLoginDto);
 
-    Logger.debug(`${email}, ${password}`);
-    throw new Error('Method·not·implemented.');
-    return;
+    if (!user) {
+      throw new NotFoundException('유저가 존재하지 않습니다.');
+    }
+
+    return this.authService.login({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    });
   }
 
   async getUserInfo(userId: number): Promise<string> {

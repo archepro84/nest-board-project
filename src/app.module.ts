@@ -16,6 +16,7 @@ import {
   LoggerMiddleware,
 } from './logger/logger.middleware';
 import { UsersController } from './users/users.controller';
+import authConfig from './config/authConfig';
 
 const configModuleOption: ConfigModuleOptions = {
   envFilePath: [
@@ -23,7 +24,7 @@ const configModuleOption: ConfigModuleOptions = {
       process.env.NODE_ENV ? process.env.NODE_ENV : 'development'
     }.env`,
   ],
-  load: [emailConfig],
+  load: [emailConfig, authConfig],
   isGlobal: true,
   validationSchema,
 };
