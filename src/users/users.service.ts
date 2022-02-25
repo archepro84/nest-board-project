@@ -1,6 +1,5 @@
 import {
   Injectable,
-  Logger,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -12,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ulid } from 'ulid';
 import { EmailService } from '../email/email.service';
 import { AuthService } from '../auth/auth.service';
+import { UserInfo } from './user-info';
 
 @Injectable()
 export class UsersService {
@@ -86,10 +86,18 @@ export class UsersService {
     });
   }
 
-  async getUserInfo(userId: number): Promise<string> {
-    Logger.debug(`${userId}`);
-    throw new Error('Method·not·implemented.');
-    return;
+  async getUserInfo(userId: string): Promise<UserInfo> {
+    const user = await this.usersRepository.getUserInfo(userId);
+
+    if (!user) {
+      throw new NotFoundException('유저가 존재하지 않습니다.');
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
   }
 
   async removeUser(id: number) {

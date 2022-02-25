@@ -48,4 +48,10 @@ export class UsersRepository extends Repository<UserEntity> {
 
     return user;
   }
+
+  async getUserInfo(userId: string): Promise<UserEntity> {
+    const user = await this.findOne({ id: userId });
+
+    return user;
+  }
 }
