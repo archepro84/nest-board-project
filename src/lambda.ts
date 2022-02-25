@@ -9,7 +9,6 @@ import { AppModule } from './app.module';
 
 import * as express from 'express';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { AuthGuard } from './auth/auth.guard';
 
 const binaryMimeTypes: string[] = [];
 
@@ -24,7 +23,6 @@ async function bootstrapServer(): Promise<Server> {
     );
     nestApp.useGlobalPipes(new ValidationPipe());
     nestApp.use(eventContext());
-    // nestApp.useGlobalGuards(new AuthGuard()); // Global Guard
     await nestApp.init();
     cachedServer = createServer(expressApp, undefined, binaryMimeTypes);
   }
