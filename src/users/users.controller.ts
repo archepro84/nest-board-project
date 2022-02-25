@@ -10,6 +10,7 @@ import {
   ParseIntPipe,
   ValidationPipe,
   Headers,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,6 +18,7 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthService } from '../auth/auth.service';
 import { UserInfo } from './user-info';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller({ path: 'users', scope: Scope.DEFAULT })
 export class UsersController {
@@ -42,15 +44,12 @@ export class UsersController {
     return this.usersService.login(dto);
   }
 
+  @UseGuards(AuthGuard)
   @Get('/:id')
   getUserInfo(
     @Headers() headers: any,
     @Param('id') userId: string,
   ): Promise<UserInfo> {
-    const jwtString = headers.authorization.split('Bearer ')[1];
-
-    this.authService.verify(jwtString);
-
     return this.usersService.getUserInfo(userId);
   }
 
