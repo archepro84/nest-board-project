@@ -11,6 +11,8 @@ import {
   ValidationPipe,
   Headers,
   UseGuards,
+  Logger,
+  Request,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +21,12 @@ import { UserLoginDto } from './dto/user-login.dto';
 import { AuthService } from '../auth/auth.service';
 import { UserInfo } from './user-info';
 import { AuthGuard } from '../auth/auth.guard';
+import { User, UserData } from '../utils/decorators/users-transform';
+
+interface User {
+  name: string;
+  email: string;
+}
 
 @Controller({ path: 'users', scope: Scope.DEFAULT })
 export class UsersController {
@@ -56,5 +64,11 @@ export class UsersController {
   @Delete('/:id')
   removeUser(@Param('id') userId: number) {
     return this.usersService.removeUser(userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get()
+  getHello(@UserData('name') name: string) {
+    Logger.debug(name);
   }
 }

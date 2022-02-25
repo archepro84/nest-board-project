@@ -38,9 +38,9 @@ export class AuthService {
       ) &
         User;
 
-      const { id, email } = payload;
+      const { name, email } = payload;
 
-      return { userId: id, email };
+      return { name, email };
     } catch (e) {
       throw new UnauthorizedException();
     }
