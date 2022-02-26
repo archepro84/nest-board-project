@@ -7,13 +7,12 @@ import {
   Delete,
   Query,
   Scope,
-  ParseIntPipe,
   ValidationPipe,
   Headers,
   UseGuards,
   Logger,
-  Request,
-  SetMetadata,
+  Inject,
+  LoggerService,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -34,6 +33,7 @@ export class UsersController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    @Inject(Logger) private readonly logger: LoggerService,
   ) {}
 
   @Post()
@@ -77,6 +77,6 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Get()
   getHello(@UserData('name') name: string) {
-    Logger.debug(name);
+    this.logger.debug(name);
   }
 }

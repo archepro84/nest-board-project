@@ -9,10 +9,39 @@ import { AppModule } from './app.module';
 
 import * as express from 'express';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';
+import * as winston from 'winston';
+import {
+  WINSTON_MODULE_NEST_PROVIDER,
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
+import { WinstonModuleOptions } from 'nest-winston/dist/winston.interfaces';
 
 const binaryMimeTypes: string[] = [];
 
 let cachedServer: Server;
+
+const winstonModuleOption: WinstonModuleOptions = {
+  transports: [
+    new winston.transports.Console({
+      level: process.env.NODE_ENV == 'production' ? 'info' : 'silly',
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        nestWinstonModuleUtilities.format.nestLike('nest-board-app', {
+          prettyPrint: true,
+        }),
+      ),
+    }),
+  ],
+};
+
+const nestApplicationOptions: NestApplicationOptions = {
+  logger: WinstonModule.createLogger(winstonModuleOption),
+  // process.env.NODE_ENV == 'production'
+  //   ? ['error', 'warn', 'log']
+  //   : ['error', 'warn', 'log', 'verbose', 'debug'],
+};
 
 async function bootstrapServer(): Promise<Server> {
   if (!cachedServer) {
@@ -20,14 +49,13 @@ async function bootstrapServer(): Promise<Server> {
     const nestApp: INestApplication = await NestFactory.create(
       AppModule,
       new ExpressAdapter(expressApp),
-      {
-        logger:
-          process.env.NODE_ENV == 'production'
-            ? ['error', 'warn', 'log']
-            : ['error', 'warn', 'log', 'verbose', 'debug'],
-      },
+      nestApplicationOptions,
     );
+
     nestApp.useGlobalPipes(new ValidationPipe());
+    // nestApp.useLogger(nestApp.get(WINSTON_MODULE_NEST_PROVIDER)); // Global Logger
+    // nestApp.use(mainLogger); // Global Middleware
+
     nestApp.use(eventContext());
     await nestApp.init();
     cachedServer = createServer(expressApp, undefined, binaryMimeTypes);

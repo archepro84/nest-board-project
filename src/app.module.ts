@@ -18,12 +18,6 @@ import {
 import { UsersController } from './users/users.controller';
 import { LoggerModule } from './logger/logger.module';
 import authConfig from './config/authConfig';
-import * as winston from 'winston';
-import {
-  utilities as nestWinstonModuleUtilities,
-  WinstonModule,
-} from 'nest-winston';
-import { WinstonModuleOptions } from 'nest-winston/dist/winston.interfaces';
 
 const configModuleOption: ConfigModuleOptions = {
   envFilePath: [
@@ -36,27 +30,12 @@ const configModuleOption: ConfigModuleOptions = {
   validationSchema,
 };
 
-const winstonModuleOption: WinstonModuleOptions = {
-  transports: [
-    new winston.transports.Console({
-      level: process.env.NODE_ENV == 'production' ? 'info' : 'silly',
-      format: winston.format.combine(
-        winston.format.timestamp(),
-        nestWinstonModuleUtilities.format.nestLike('nest-board-app', {
-          prettyPrint: true,
-        }),
-      ),
-    }),
-  ],
-};
-
 @Module({
   imports: [
     ConfigModule.forRoot(configModuleOption),
     TypeOrmModule.forRoot(),
     UsersModule,
     LoggerModule,
-    WinstonModule.forRoot(winstonModuleOption),
   ],
   controllers: [AppController],
   providers: [AppService],
