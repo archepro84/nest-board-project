@@ -16,6 +16,7 @@ export class EmailService {
 
   constructor(
     @Inject(emailConfig.KEY) private config: ConfigType<typeof emailConfig>,
+    @Inject(Logger) private logger: Logger,
   ) {
     this.transporter = nodemailer.createTransport({
       service: config.service,
@@ -44,8 +45,6 @@ export class EmailService {
       </form>
       `,
     };
-
-    Logger.debug(signupVerifyToken);
 
     return await this.transporter.sendMail(mailOptions);
   }
