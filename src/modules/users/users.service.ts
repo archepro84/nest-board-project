@@ -10,7 +10,7 @@ import { UserLoginDto } from './dto/user-login.dto';
 import { UsersRepository } from './users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ulid } from 'ulid';
-import { EmailService } from '../../email/email.service';
+import { EmailService } from '../../common/email/email.service';
 import { AuthService } from '../../auth/auth.service';
 import { UserInfo } from './user-info';
 

@@ -14,9 +14,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   Logger2Middleware,
   LoggerMiddleware,
-} from './logger/logger.middleware';
+} from './common/logger/logger.middleware';
 import { UsersController } from './modules/users/users.controller';
-import { LoggerModule } from './logger/logger.module';
+import { LoggerModule } from './common/logger/logger.module';
 import authConfig from './config/authConfig';
 
 const configModuleOption: ConfigModuleOptions = {
