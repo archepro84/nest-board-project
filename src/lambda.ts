@@ -20,6 +20,12 @@ async function bootstrapServer(): Promise<Server> {
     const nestApp: INestApplication = await NestFactory.create(
       AppModule,
       new ExpressAdapter(expressApp),
+      {
+        logger:
+          process.env.NODE_ENV == 'production'
+            ? ['error', 'warn', 'log']
+            : ['error', 'warn', 'log', 'verbose', 'debug'],
+      },
     );
     nestApp.useGlobalPipes(new ValidationPipe());
     nestApp.use(eventContext());
