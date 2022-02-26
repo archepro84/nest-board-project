@@ -12,7 +12,6 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';
 import * as winston from 'winston';
 import {
-  WINSTON_MODULE_NEST_PROVIDER,
   utilities as nestWinstonModuleUtilities,
   WinstonModule,
 } from 'nest-winston';
@@ -38,9 +37,6 @@ const winstonModuleOption: WinstonModuleOptions = {
 
 const nestApplicationOptions: NestApplicationOptions = {
   logger: WinstonModule.createLogger(winstonModuleOption),
-  // process.env.NODE_ENV == 'production'
-  //   ? ['error', 'warn', 'log']
-  //   : ['error', 'warn', 'log', 'verbose', 'debug'],
 };
 
 async function bootstrapServer(): Promise<Server> {
