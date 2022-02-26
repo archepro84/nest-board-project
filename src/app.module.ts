@@ -1,4 +1,5 @@
 import {
+  HttpException,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -18,6 +19,7 @@ import {
 import { UsersController } from './modules/users/users.controller';
 import { LoggerModule } from './common/logger/logger.module';
 import authConfig from './config/authConfig';
+import { ExceptionModule } from './exception/exception.module';
 
 const configModuleOption: ConfigModuleOptions = {
   envFilePath: [
@@ -36,6 +38,7 @@ const configModuleOption: ConfigModuleOptions = {
     TypeOrmModule.forRoot(),
     UsersModule,
     LoggerModule,
+    ExceptionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

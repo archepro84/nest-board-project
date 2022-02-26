@@ -13,6 +13,7 @@ import {
   Logger,
   Inject,
   LoggerService,
+  UseFilters,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,6 +23,7 @@ import { AuthService } from '../../auth/auth.service';
 import { UserInfo } from './user-info';
 import { AuthGuard } from '../../auth/auth.guard';
 import { UserData, UserRoles } from '../../utils/decorators/users-transform';
+import { HttpExceptionFilter } from '../../common/filters/http-exception.filter';
 
 interface User {
   name: string;
@@ -36,6 +38,7 @@ export class UsersController {
     @Inject(Logger) private readonly logger: LoggerService,
   ) {}
 
+  @UseFilters(HttpExceptionFilter)
   @Post()
   createUser(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
