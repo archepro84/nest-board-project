@@ -18,10 +18,10 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { UserInfo } from './user-info';
-import { AuthGuard } from '../auth/auth.guard';
-import { UserData, UserRoles } from '../utils/decorators/users-transform';
+import { AuthGuard } from '../../auth/auth.guard';
+import { UserData, UserRoles } from '../../utils/decorators/users-transform';
 
 interface User {
   name: string;

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './modules/users/users.module';
 import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
 import { validationSchema } from './config/validationSchema';
 import emailConfig from './config/emailConfig';
@@ -15,7 +15,7 @@ import {
   Logger2Middleware,
   LoggerMiddleware,
 } from './logger/logger.middleware';
-import { UsersController } from './users/users.controller';
+import { UsersController } from './modules/users/users.controller';
 import { LoggerModule } from './logger/logger.module';
 import authConfig from './config/authConfig';
 
