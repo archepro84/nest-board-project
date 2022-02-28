@@ -14,6 +14,8 @@ import {
   Inject,
   LoggerService,
   UseFilters,
+  UseInterceptors,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,6 +26,7 @@ import { UserInfo } from './user-info';
 import { AuthGuard } from '../../auth/auth.guard';
 import { UserData, UserRoles } from '../../utils/decorators/users-transform';
 import { HttpExceptionFilter } from '../../common/filters/http-exception.filter';
+import { ErrorsInterceptor } from '../../common/interceptors/errors.interceptor';
 
 interface User {
   name: string;
@@ -63,13 +66,15 @@ export class UsersController {
     return this.usersService.login(dto);
   }
 
+  @UseInterceptors(ErrorsInterceptor)
   @UseGuards(AuthGuard)
   @Get('/:id')
   getUserInfo(
     @Headers() headers: any,
     @Param('id') userId: string,
   ): Promise<UserInfo> {
-    return this.usersService.getUserInfo(userId);
+    throw new InternalServerErrorException();
+    // return this.usersService.getUserInfo(userId);
   }
 
   @Delete('/:id')

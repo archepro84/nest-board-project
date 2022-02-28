@@ -17,6 +17,7 @@ import {
 } from 'nest-winston';
 import { WinstonModuleOptions } from 'nest-winston/dist/winston.interfaces';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 const binaryMimeTypes: string[] = [];
 
@@ -52,7 +53,10 @@ async function bootstrapServer(): Promise<Server> {
     nestApp.useGlobalPipes(new ValidationPipe());
     // nestApp.useLogger(nestApp.get(WINSTON_MODULE_NEST_PROVIDER)); // Global Logger
     // nestApp.use(mainLogger); // Global Middleware
-    nestApp.useGlobalInterceptors(new LoggingInterceptor()); // Global Interceptor
+    nestApp.useGlobalInterceptors(
+      new LoggingInterceptor(),
+      new TransformInterceptor(),
+    ); // Global Interceptor
 
     nestApp.use(eventContext());
     await nestApp.init();
