@@ -8,6 +8,7 @@ import {
   WinstonModule,
 } from 'nest-winston';
 import { WinstonModuleOptions } from 'nest-winston/dist/winston.interfaces';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 const winstonModuleOption: WinstonModuleOptions = {
   transports: [
@@ -39,6 +40,7 @@ async function bootstrap() {
   );
   // nestApp.useLogger(nestApp.get(WINSTON_MODULE_NEST_PROVIDER)); // Global Logger
   // nestApp.use(mainLogger); // Global Middleware
+  nestApp.useGlobalInterceptors(new LoggingInterceptor()); // Global Interceptor
   await nestApp.listen(3000);
 }
 
