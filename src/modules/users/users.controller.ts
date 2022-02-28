@@ -73,8 +73,8 @@ export class UsersController {
     @Headers() headers: any,
     @Param('id') userId: string,
   ): Promise<UserInfo> {
-    throw new InternalServerErrorException();
-    // return this.usersService.getUserInfo(userId);
+    // throw new InternalServerErrorException();
+    return this.usersService.getUserInfo(userId);
   }
 
   @Delete('/:id')
