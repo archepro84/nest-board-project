@@ -10,15 +10,22 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler<any>,
-  ): Observable<any> | Promise<Observable<any>> {
-    Logger.debug('Before:...');
+  constructor(private logger: Logger) {}
 
-    const now = Date.now();
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const { method, url, body } = context.getArgByIndex(0);
+    this.logger.log(`'Request to ${method} ${url}`);
+
     return next
       .handle()
-      .pipe(tap(() => Logger.debug(`After... ${Date.now() - now}ms`)));
+      .pipe(
+        tap((data) =>
+          this.logger.log(
+            `Response from ${method} ${url} \n response: ${JSON.stringify(
+              data,
+            )}`,
+          ),
+        ),
+      );
   }
 }
