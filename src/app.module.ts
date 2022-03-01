@@ -20,6 +20,7 @@ import { UsersController } from './modules/users/users.controller';
 import { LoggerModule } from './common/logger/logger.module';
 import authConfig from './config/authConfig';
 import { ExceptionModule } from './exception/exception.module';
+import { BatchModule } from './batch/batch.module';
 
 const configModuleOption: ConfigModuleOptions = {
   envFilePath: [
@@ -39,6 +40,7 @@ const configModuleOption: ConfigModuleOptions = {
     UsersModule,
     LoggerModule,
     ExceptionModule,
+    BatchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
