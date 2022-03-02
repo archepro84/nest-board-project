@@ -23,6 +23,7 @@ import { BatchModule } from './modules/batch/batch.module';
 import { HealthCheckController } from './modules/health-check/health-check.controller';
 import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
+import { AnimalHealthIndicator } from './modules/health-check/animal.check';
 
 const configModuleOption: ConfigModuleOptions = {
   envFilePath: [
@@ -47,7 +48,7 @@ const configModuleOption: ConfigModuleOptions = {
     HttpModule,
   ],
   controllers: [AppController, HealthCheckController],
-  providers: [AppService],
+  providers: [AppService, AnimalHealthIndicator],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
