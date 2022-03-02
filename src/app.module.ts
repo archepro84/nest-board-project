@@ -1,5 +1,4 @@
 import {
-  HttpException,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -21,6 +20,7 @@ import { LoggerModule } from './common/logger/logger.module';
 import authConfig from './config/authConfig';
 import { ExceptionModule } from './exception/exception.module';
 import { BatchModule } from './modules/batch/batch.module';
+import { HealthCheckController } from './modules/health-check/health-check.controller';
 
 const configModuleOption: ConfigModuleOptions = {
   envFilePath: [
@@ -42,7 +42,7 @@ const configModuleOption: ConfigModuleOptions = {
     ExceptionModule,
     BatchModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthCheckController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
