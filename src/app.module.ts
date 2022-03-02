@@ -21,6 +21,8 @@ import authConfig from './config/authConfig';
 import { ExceptionModule } from './exception/exception.module';
 import { BatchModule } from './modules/batch/batch.module';
 import { HealthCheckController } from './modules/health-check/health-check.controller';
+import { TerminusModule } from '@nestjs/terminus';
+import { HttpModule } from '@nestjs/axios';
 
 const configModuleOption: ConfigModuleOptions = {
   envFilePath: [
@@ -41,6 +43,8 @@ const configModuleOption: ConfigModuleOptions = {
     LoggerModule,
     ExceptionModule,
     BatchModule,
+    TerminusModule,
+    HttpModule,
   ],
   controllers: [AppController, HealthCheckController],
   providers: [AppService],
