@@ -7,6 +7,7 @@ import { UsersRepository } from './users.repository';
 import { AuthModule } from '../../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { HandlerRolesGuard } from './users.guard';
+import { CqrsModule } from '@nestjs/cqrs';
 
 const handlerRolesGuardProvider = {
   provide: APP_GUARD,
@@ -18,6 +19,7 @@ const handlerRolesGuardProvider = {
     EmailModule,
     TypeOrmModule.forFeature([UsersRepository]),
     AuthModule,
+    CqrsModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, handlerRolesGuardProvider, Logger],
