@@ -6,13 +6,14 @@ import { ulid } from 'ulid';
 import { Connection, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities/user.entity';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
     private connection: Connection,
-    private eventBus: EventBus,
+    // private eventBus: EventBus,
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
   ) {}
@@ -26,32 +27,26 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       );
     }
 
-    const signupVerifyToken = uuid.v1();
+    // const signupVerifyToken = uuid.v1();
 
-    await this.saveUserUsingTransaction(
-      name,
-      email,
-      password,
-      signupVerifyToken,
-    );
+    // await this.saveUserUsingTransaction(
+    //   name,
+    //   email,
+    //   password,
+    //   signupVerifyToken,
+    // );
 
     // this.eventBus.publish(new UserCreatedEvent(email, signupVerifyToken));
     // this.eventBus.publish(new TestEvent());
   }
 
-  private async checkUserExists(emailAddress: string): Promise<boolean> {
-    const user = await this.usersRepository.findOne({ email: emailAddress });
-
-    return user !== undefined;
-  }
-
-  private async saveUserUsingTransaction(
-    name: string,
-    email: string,
-    password: string,
+  async saveUserUsingTransaction(
+    createUserDto: CreateUserDto,
     signupVerifyToken: string,
-  ) {
+  ): Promise<void> {
+    // Python ContextManager
     await this.connection.transaction(async (manager) => {
+      const { name, email, password } = createUserDto;
       const user = new UserEntity();
       user.id = ulid();
       user.name = name;
@@ -61,5 +56,11 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
 
       await manager.save(user);
     });
+  }
+
+  async checkUserExists(emailAddress: string): Promise<boolean> {
+    const user = await this.usersRepository.findOne({ email: emailAddress });
+
+    return user !== undefined;
   }
 }
