@@ -27,6 +27,8 @@ import { AuthGuard } from '../../auth/auth.guard';
 import { UserData, UserRoles } from '../../utils/decorators/users-transform';
 import { HttpExceptionFilter } from '../../common/filters/http-exception.filter';
 import { ErrorsInterceptor } from '../../common/interceptors/errors.interceptor';
+import { CommandBus } from '@nestjs/cqrs';
+import { CreateUserCommand } from './command/create-user.command';
 
 interface User {
   name: string;
@@ -38,6 +40,7 @@ export class UsersController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private commandBus: CommandBus,
     @Inject(Logger) private readonly logger: LoggerService,
   ) {}
 
@@ -46,7 +49,12 @@ export class UsersController {
   createUser(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<void> {
-    return this.usersService.createUser(createUserDto, null);
+    const { name, email, password } = createUserDto;
+
+    const command = new CreateUserCommand(name, email, password);
+
+    return this.commandBus.execute(command);
+    // return this.usersService.createUser(createUserDto, null);
   }
 
   @Post('/admin')

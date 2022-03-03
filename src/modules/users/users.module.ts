@@ -8,6 +8,7 @@ import { AuthModule } from '../../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { HandlerRolesGuard } from './users.guard';
 import { CqrsModule } from '@nestjs/cqrs';
+import { CreateUserHandler } from './command/create-user-handler';
 
 const handlerRolesGuardProvider = {
   provide: APP_GUARD,
@@ -22,6 +23,11 @@ const handlerRolesGuardProvider = {
     CqrsModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, handlerRolesGuardProvider, Logger],
+  providers: [
+    UsersService,
+    handlerRolesGuardProvider,
+    Logger,
+    CreateUserHandler,
+  ],
 })
 export class UsersModule {}
