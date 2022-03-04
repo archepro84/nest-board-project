@@ -15,7 +15,6 @@ import {
   LoggerService,
   UseFilters,
   UseInterceptors,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -27,8 +26,9 @@ import { AuthGuard } from '../../auth/auth.guard';
 import { UserData, UserRoles } from '../../utils/decorators/users-transform';
 import { HttpExceptionFilter } from '../../common/filters/http-exception.filter';
 import { ErrorsInterceptor } from '../../common/interceptors/errors.interceptor';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from './command/create-user.command';
+import { GetUserInfoQuery } from './query/get-user-info.query';
 
 interface User {
   name: string;
@@ -41,6 +41,7 @@ export class UsersController {
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
     private commandBus: CommandBus,
+    private queryBus: QueryBus,
     @Inject(Logger) private readonly logger: LoggerService,
   ) {}
 
@@ -72,6 +73,17 @@ export class UsersController {
   @Post('/login')
   login(@Body() dto: UserLoginDto): Promise<string> {
     return this.usersService.login(dto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/query/:id')
+  getUserInfoQuery(
+    @Headers() headers: any,
+    @Param('id') userId: string,
+  ): Promise<UserInfo> {
+    const getUserInfoQuery = new GetUserInfoQuery(userId);
+
+    return this.queryBus.execute(getUserInfoQuery);
   }
 
   @UseInterceptors(ErrorsInterceptor)
