@@ -10,6 +10,7 @@ import { HandlerRolesGuard } from './users.guard';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateUserHandler } from './command/create-user-handler';
 import { UserEntity } from './entities/user.entity';
+import { UserEventsHandler } from './event/user-events.handler';
 
 const handlerRolesGuardProvider = {
   provide: APP_GUARD,
@@ -17,6 +18,8 @@ const handlerRolesGuardProvider = {
 };
 
 const commandHandlers = [CreateUserHandler];
+
+const eventHandlers = [UserEventsHandler];
 
 @Module({
   imports: [
@@ -31,6 +34,7 @@ const commandHandlers = [CreateUserHandler];
     handlerRolesGuardProvider,
     Logger,
     ...commandHandlers,
+    ...eventHandlers,
   ],
 })
 export class UsersModule {}
