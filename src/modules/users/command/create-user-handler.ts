@@ -7,18 +7,21 @@ import { Connection, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { UserCreateEvent } from '../event/user-create.event';
+import { TestEvent } from '../event/test.event';
 
 @Injectable()
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
     private connection: Connection,
-    // private eventBus: EventBus,
+    private eventBus: EventBus,
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
   ) {}
+
   async execute(command: CreateUserCommand) {
-    const { name, email, password } = command;
+    const { email } = command;
 
     const userExist = await this.checkUserExists(email);
     if (userExist) {
@@ -27,26 +30,21 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       );
     }
 
-    // const signupVerifyToken = uuid.v1();
+    const signupVerifyToken = uuid.v1();
 
-    // await this.saveUserUsingTransaction(
-    //   name,
-    //   email,
-    //   password,
-    //   signupVerifyToken,
-    // );
+    await this.saveUserUsingTransaction(command, signupVerifyToken);
 
-    // this.eventBus.publish(new UserCreatedEvent(email, signupVerifyToken));
-    // this.eventBus.publish(new TestEvent());
+    this.eventBus.publish(new UserCreateEvent(email, signupVerifyToken));
+    this.eventBus.publish(new TestEvent());
   }
 
   async saveUserUsingTransaction(
-    createUserDto: CreateUserDto,
+    createUserCommand: CreateUserCommand,
     signupVerifyToken: string,
   ): Promise<void> {
-    // Python ContextManager
     await this.connection.transaction(async (manager) => {
-      const { name, email, password } = createUserDto;
+      const { name, email, password } = createUserCommand;
+
       const user = new UserEntity();
       user.id = ulid();
       user.name = name;
