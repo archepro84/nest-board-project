@@ -6,7 +6,7 @@ import { ulid } from 'ulid';
 import { Connection, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities/user.entity';
-import { UserCreatedEvent } from '../event/user-created.event';
+import { UserCreatedEvent } from '../domain/user-created.event';
 import { TestEvent } from '../event/test.event';
 
 @Injectable()

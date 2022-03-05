@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
 import { User } from './user';
-import { UserCreatedEvent } from '../event/user-created.event';
+import { UserCreatedEvent } from './user-created.event';
 
 @Injectable()
 export class UserFactory {
