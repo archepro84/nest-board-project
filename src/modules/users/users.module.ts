@@ -11,6 +11,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { CreateUserHandler } from './command/create-user-handler';
 import { UserEntity } from './entities/user.entity';
 import { UserEventsHandler } from './event/user-events.handler';
+import { GetUserInfoQueryHandler } from './query/get-user-info.handler';
 
 const handlerRolesGuardProvider = {
   provide: APP_GUARD,
@@ -20,6 +21,8 @@ const handlerRolesGuardProvider = {
 const commandHandlers = [CreateUserHandler];
 
 const eventHandlers = [UserEventsHandler];
+
+const queryHandlers = [GetUserInfoQueryHandler];
 
 @Module({
   imports: [
@@ -35,6 +38,7 @@ const eventHandlers = [UserEventsHandler];
     Logger,
     ...commandHandlers,
     ...eventHandlers,
+    ...queryHandlers,
   ],
 })
 export class UsersModule {}
