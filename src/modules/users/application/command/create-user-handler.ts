@@ -7,7 +7,6 @@ import { Connection, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../entities/user.entity';
 import { UserCreatedEvent } from '../../domain/user-created.event';
-import { TestEvent } from '../event/test.event';
 
 @Injectable()
 @CommandHandler(CreateUserCommand)
@@ -34,7 +33,6 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     await this.saveUserUsingTransaction(command, signupVerifyToken);
 
     this.eventBus.publish(new UserCreatedEvent(email, signupVerifyToken));
-    this.eventBus.publish(new TestEvent());
   }
 
   async saveUserUsingTransaction(
