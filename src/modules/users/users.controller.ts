@@ -27,8 +27,8 @@ import { UserData, UserRoles } from '../../utils/decorators/users-transform';
 import { HttpExceptionFilter } from '../../common/filters/http-exception.filter';
 import { ErrorsInterceptor } from '../../common/interceptors/errors.interceptor';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from './command/create-user.command';
-import { GetUserInfoQuery } from './query/get-user-info.query';
+import { CreateUserCommand } from './application/command/create-user.command';
+import { GetUserInfoQuery } from './application/query/get-user-info.query';
 
 interface User {
   name: string;
