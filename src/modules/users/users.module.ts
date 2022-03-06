@@ -12,6 +12,7 @@ import { CreateUserHandler } from './command/create-user-handler';
 import { UserEntity } from './entities/user.entity';
 import { UserEventsHandler } from './event/user-events.handler';
 import { GetUserInfoQueryHandler } from './query/get-user-info.handler';
+import { UserFactory } from './domain/user.factory';
 
 const handlerRolesGuardProvider = {
   provide: APP_GUARD,
@@ -39,6 +40,7 @@ const queryHandlers = [GetUserInfoQueryHandler];
     ...commandHandlers,
     ...eventHandlers,
     ...queryHandlers,
+    UserFactory,
   ],
 })
 export class UsersModule {}
