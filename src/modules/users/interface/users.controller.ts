@@ -14,7 +14,6 @@ import {
   Inject,
   LoggerService,
   UseFilters,
-  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from '../users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,15 +24,9 @@ import { UserInfo } from './user-info';
 import { AuthGuard } from '../../../auth/auth.guard';
 import { UserData, UserRoles } from '../../../utils/decorators/users-transform';
 import { HttpExceptionFilter } from '../../../common/filters/http-exception.filter';
-import { ErrorsInterceptor } from '../../../common/interceptors/errors.interceptor';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/command/create-user.command';
 import { GetUserInfoQuery } from '../application/query/get-user-info.query';
-
-interface User {
-  name: string;
-  email: string;
-}
 
 @Controller({ path: 'users', scope: Scope.DEFAULT })
 export class UsersController {
@@ -55,7 +48,6 @@ export class UsersController {
     const command = new CreateUserCommand(name, email, password);
 
     return this.commandBus.execute(command);
-    // return this.usersService.createUser(createUserDto, null);
   }
 
   @Post('/admin')
@@ -76,7 +68,7 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('/query/:id')
+  @Get('/:id')
   getUserInfoQuery(
     @Headers() headers: any,
     @Param('id') userId: string,
@@ -84,17 +76,6 @@ export class UsersController {
     const getUserInfoQuery = new GetUserInfoQuery(userId);
 
     return this.queryBus.execute(getUserInfoQuery);
-  }
-
-  @UseInterceptors(ErrorsInterceptor)
-  @UseGuards(AuthGuard)
-  @Get('/:id')
-  getUserInfo(
-    @Headers() headers: any,
-    @Param('id') userId: string,
-  ): Promise<UserInfo> {
-    // throw new InternalServerErrorException();
-    return this.usersService.getUserInfo(userId);
   }
 
   @Delete('/:id')
@@ -106,5 +87,6 @@ export class UsersController {
   @Get()
   getHello(@UserData('name') name: string) {
     this.logger.debug(name);
+    return;
   }
 }
