@@ -17,11 +17,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { VerifyEmailDto } from './dto/verify-email.dto';
-import { UserLoginDto } from './dto/user-login.dto';
+import { CreateUserDto } from './interface/dto/create-user.dto';
+import { VerifyEmailDto } from './interface/dto/verify-email.dto';
+import { UserLoginDto } from './interface/dto/user-login.dto';
 import { AuthService } from '../../auth/auth.service';
-import { UserInfo } from './user-info';
+import { UserInfo } from './interface/user-info';
 import { AuthGuard } from '../../auth/auth.guard';
 import { UserData, UserRoles } from '../../utils/decorators/users-transform';
 import { HttpExceptionFilter } from '../../common/filters/http-exception.filter';

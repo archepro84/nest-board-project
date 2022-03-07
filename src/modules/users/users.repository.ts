@@ -1,9 +1,9 @@
 import { Connection, EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './interface/dto/create-user.dto';
 import { ulid } from 'ulid';
-import { VerifyEmailDto } from './dto/verify-email.dto';
-import { UserLoginDto } from './dto/user-login.dto';
+import { VerifyEmailDto } from './interface/dto/verify-email.dto';
+import { UserLoginDto } from './interface/dto/user-login.dto';
 
 @EntityRepository(UserEntity)
 export class UsersRepository extends Repository<UserEntity> {

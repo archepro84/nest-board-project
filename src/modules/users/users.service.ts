@@ -4,15 +4,15 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { VerifyEmailDto } from './dto/verify-email.dto';
-import { UserLoginDto } from './dto/user-login.dto';
+import { CreateUserDto } from './interface/dto/create-user.dto';
+import { VerifyEmailDto } from './interface/dto/verify-email.dto';
+import { UserLoginDto } from './interface/dto/user-login.dto';
 import { UsersRepository } from './users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ulid } from 'ulid';
 import { EmailService } from '../../common/email/email.service';
 import { AuthService } from '../../auth/auth.service';
-import { UserInfo } from './user-info';
+import { UserInfo } from './interface/user-info';
 
 @Injectable()
 export class UsersService {
