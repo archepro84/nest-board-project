@@ -16,19 +16,19 @@ import {
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './interface/dto/create-user.dto';
-import { VerifyEmailDto } from './interface/dto/verify-email.dto';
-import { UserLoginDto } from './interface/dto/user-login.dto';
-import { AuthService } from '../../auth/auth.service';
-import { UserInfo } from './interface/user-info';
-import { AuthGuard } from '../../auth/auth.guard';
-import { UserData, UserRoles } from '../../utils/decorators/users-transform';
-import { HttpExceptionFilter } from '../../common/filters/http-exception.filter';
-import { ErrorsInterceptor } from '../../common/interceptors/errors.interceptor';
+import { UsersService } from '../users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
+import { UserLoginDto } from './dto/user-login.dto';
+import { AuthService } from '../../../auth/auth.service';
+import { UserInfo } from './user-info';
+import { AuthGuard } from '../../../auth/auth.guard';
+import { UserData, UserRoles } from '../../../utils/decorators/users-transform';
+import { HttpExceptionFilter } from '../../../common/filters/http-exception.filter';
+import { ErrorsInterceptor } from '../../../common/interceptors/errors.interceptor';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from './application/command/create-user.command';
-import { GetUserInfoQuery } from './application/query/get-user-info.query';
+import { CreateUserCommand } from '../application/command/create-user.command';
+import { GetUserInfoQuery } from '../application/query/get-user-info.query';
 
 interface User {
   name: string;
