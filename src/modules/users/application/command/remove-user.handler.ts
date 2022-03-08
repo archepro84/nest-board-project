@@ -3,7 +3,7 @@ import { RemoveUserCommand } from './remove-user.command';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Connection, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../../entities/user.entity';
+import { UserEntity } from '../../infra/db/entities/user.entity';
 
 @Injectable()
 @CommandHandler(RemoveUserCommand)

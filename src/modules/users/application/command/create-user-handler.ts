@@ -5,7 +5,7 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { ulid } from 'ulid';
 import { Connection, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../../entities/user.entity';
+import { UserEntity } from '../../infra/db/entities/user.entity';
 import { UserCreatedEvent } from '../../domain/user-created.event';
 
 @Injectable()

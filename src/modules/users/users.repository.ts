@@ -1,5 +1,5 @@
 import { Connection, EntityRepository, Repository } from 'typeorm';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity } from './infra/db/entities/user.entity';
 import { CreateUserDto } from './interface/dto/create-user.dto';
 import { ulid } from 'ulid';
 import { VerifyEmailDto } from './interface/dto/verify-email.dto';
