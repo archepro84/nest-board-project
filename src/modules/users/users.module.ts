@@ -13,10 +13,16 @@ import { UserEntity } from './infra/db/entities/user.entity';
 import { UserEventsHandler } from './application/event/user-events.handler';
 import { GetUserInfoQueryHandler } from './application/query/get-user-info.handler';
 import { UserFactory } from './domain/user.factory';
+import { UserRepository } from './infra/db/repository/user.repository';
 
 const handlerRolesGuardProvider = {
   provide: APP_GUARD,
   useClass: HandlerRolesGuard,
+};
+
+const userRepositoryProvider = {
+  provide: 'UserRepository',
+  useClass: UserRepository,
 };
 
 const commandHandlers = [CreateUserHandler];
@@ -41,6 +47,7 @@ const queryHandlers = [GetUserInfoQueryHandler];
     ...eventHandlers,
     ...queryHandlers,
     UserFactory,
+    userRepositoryProvider,
   ],
 })
 export class UsersModule {}
