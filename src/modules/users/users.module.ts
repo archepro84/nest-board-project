@@ -14,6 +14,7 @@ import { UserEventsHandler } from './application/event/user-events.handler';
 import { GetUserInfoQueryHandler } from './application/query/get-user-info.handler';
 import { UserFactory } from './domain/user.factory';
 import { UserRepository } from './infra/db/repository/user.repository';
+import { EmailService } from './infra/adapter/email.service';
 
 const handlerRolesGuardProvider = {
   provide: APP_GUARD,
@@ -23,6 +24,11 @@ const handlerRolesGuardProvider = {
 const userRepositoryProvider = {
   provide: 'UserRepository',
   useClass: UserRepository,
+};
+
+const emailServiceProvider = {
+  provide: 'EmailService',
+  useClass: EmailService,
 };
 
 const commandHandlers = [CreateUserHandler];
@@ -48,6 +54,7 @@ const queryHandlers = [GetUserInfoQueryHandler];
     ...queryHandlers,
     UserFactory,
     userRepositoryProvider,
+    emailServiceProvider,
   ],
 })
 export class UsersModule {}
