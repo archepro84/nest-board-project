@@ -1,61 +1,44 @@
 import * as uuid from 'uuid';
-import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from './create-user.command';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { ulid } from 'ulid';
-import { Connection, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../../infra/db/entities/user.entity';
-import { UserCreatedEvent } from '../../domain/user-created.event';
+import { UserFactory } from '../../domain/user.factory';
+import { UserRepository } from '../../infra/db/repository/user.repository';
 
 @Injectable()
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
-    private connection: Connection,
-    private eventBus: EventBus,
-    @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>,
+    private userFactory: UserFactory,
+    @Inject('UserRepository') private userRepository: UserRepository,
   ) {}
 
   async execute(command: CreateUserCommand) {
-    const { email } = command;
+    const { name, email, password } = command;
 
-    const userExist = await this.checkUserExists(email);
-    if (userExist) {
+    const userExist = await this.userRepository.findByEmail(email);
+    if (userExist !== null) {
       throw new UnprocessableEntityException(
         '해당 이메일로는 가입할 수 없습니다.',
       );
     }
 
+    const id = ulid();
     const signupVerifyToken = uuid.v1();
 
-    await this.saveUserUsingTransaction(command, signupVerifyToken);
+    await this.userRepository.save(
+      id,
+      name,
+      email,
+      password,
+      signupVerifyToken,
+    );
 
-    this.eventBus.publish(new UserCreatedEvent(email, signupVerifyToken));
-  }
-
-  async saveUserUsingTransaction(
-    createUserCommand: CreateUserCommand,
-    signupVerifyToken: string,
-  ): Promise<void> {
-    await this.connection.transaction(async (manager) => {
-      const { name, email, password } = createUserCommand;
-
-      const user = new UserEntity();
-      user.id = ulid();
-      user.name = name;
-      user.email = email;
-      user.password = password;
-      user.signupVerifyToken = signupVerifyToken;
-
-      await manager.save(user);
-    });
-  }
-
-  async checkUserExists(emailAddress: string): Promise<boolean> {
-    const user = await this.usersRepository.findOne({ email: emailAddress });
-
-    return user !== undefined;
+    this.userFactory.create(id, name, email, password, signupVerifyToken);
   }
 }

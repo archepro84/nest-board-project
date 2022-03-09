@@ -15,7 +15,7 @@ export class UserRepository implements IUserRepository {
     private userFactory: UserFactory,
   ) {}
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string): Promise<User | null> {
     const userEntity = await this.userRepository.findOne({ email });
 
     if (!userEntity) {
