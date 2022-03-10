@@ -27,6 +27,7 @@ import { HttpExceptionFilter } from '../../../common/filters/http-exception.filt
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/command/create-user.command';
 import { GetUserInfoQuery } from '../application/query/get-user-info.query';
+import { LoginUserCommand } from '../application/command/login-user.command';
 
 @Controller({ path: 'users', scope: Scope.DEFAULT })
 export class UsersController {
@@ -64,7 +65,13 @@ export class UsersController {
 
   @Post('/login')
   login(@Body() dto: UserLoginDto): Promise<string> {
-    return this.usersService.login(dto);
+    const { email, password } = dto;
+
+    const command = new LoginUserCommand(email, password);
+
+    return this.commandBus.execute(command);
+
+    // return this.usersService.login(dto);
   }
 
   @UseGuards(AuthGuard)

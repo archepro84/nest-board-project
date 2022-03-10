@@ -5,6 +5,7 @@ import { IUserRepository } from '../../../domain/repository/iuser.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../../domain/user';
 import { UserFactory } from '../../../domain/user.factory';
+import { UserLoginDto } from '../../../interface/dto/user-login.dto';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -49,5 +50,11 @@ export class UserRepository implements IUserRepository {
 
       await manager.save(user);
     });
+  }
+
+  async login(email: string, password: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ email, password });
+
+    return user;
   }
 }
