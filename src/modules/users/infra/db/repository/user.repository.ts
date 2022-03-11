@@ -52,8 +52,14 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async login(email: string, password: string): Promise<UserEntity> {
+  async login(email: string, password: string): Promise<UserEntity | null> {
     const user = await this.userRepository.findOne({ email, password });
+
+    return user;
+  }
+
+  async verifyEmail(signupVerifyToken: string): Promise<UserEntity | null> {
+    const user = await this.userRepository.findOne({ signupVerifyToken });
 
     return user;
   }

@@ -17,6 +17,7 @@ import { UserRepository } from './infra/db/repository/user.repository';
 import { EmailService } from './infra/adapter/email.service';
 import { LoginUserHandler } from './application/command/login-user.handler';
 import { RemoveUserHandler } from './application/command/remove-user.handler';
+import { VerifyEmailHandler } from './application/command/verify-email.handler';
 
 const handlerRolesGuardProvider = {
   provide: APP_GUARD,
@@ -37,6 +38,7 @@ const commandHandlers = [
   CreateUserHandler,
   LoginUserHandler,
   RemoveUserHandler,
+  VerifyEmailHandler,
 ];
 
 const eventHandlers = [UserEventsHandler];
