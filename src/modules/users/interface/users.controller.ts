@@ -28,6 +28,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/command/create-user.command';
 import { GetUserInfoQuery } from '../application/query/get-user-info.query';
 import { LoginUserCommand } from '../application/command/login-user.command';
+import { VerifyEmailCommand } from '../application/command/verify-email.command';
 
 @Controller({ path: 'users', scope: Scope.DEFAULT })
 export class UsersController {
@@ -64,7 +65,11 @@ export class UsersController {
 
   @Post(`/email-verify`)
   verifyEmail(@Query() dto: VerifyEmailDto) {
-    return this.usersService.verifyEmail(dto);
+    const { signupVerifyToken } = dto;
+
+    const command = new VerifyEmailCommand(signupVerifyToken);
+
+    return this.commandBus.execute(command);
   }
 
   @Post('/login')
