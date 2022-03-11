@@ -15,6 +15,8 @@ import { GetUserInfoQueryHandler } from './application/query/get-user-info.handl
 import { UserFactory } from './domain/user.factory';
 import { UserRepository } from './infra/db/repository/user.repository';
 import { EmailService } from './infra/adapter/email.service';
+import { LoginUserHandler } from './application/command/login-user.handler';
+import { RemoveUserHandler } from './application/command/remove-user.handler';
 
 const handlerRolesGuardProvider = {
   provide: APP_GUARD,
@@ -31,7 +33,11 @@ const emailServiceProvider = {
   useClass: EmailService,
 };
 
-const commandHandlers = [CreateUserHandler];
+const commandHandlers = [
+  CreateUserHandler,
+  LoginUserHandler,
+  RemoveUserHandler,
+];
 
 const eventHandlers = [UserEventsHandler];
 
