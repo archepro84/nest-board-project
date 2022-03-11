@@ -55,7 +55,11 @@ export class UsersController {
   @UserRoles('user')
   @UserRoles('admin')
   createUserAdmin(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto, null);
+    const { name, email, password } = createUserDto;
+
+    const command = new CreateUserCommand(name, email, password);
+
+    return this.commandBus.execute(command);
   }
 
   @Post(`/email-verify`)
@@ -70,8 +74,6 @@ export class UsersController {
     const command = new LoginUserCommand(email, password);
 
     return this.commandBus.execute(command);
-
-    // return this.usersService.login(dto);
   }
 
   @UseGuards(AuthGuard)
