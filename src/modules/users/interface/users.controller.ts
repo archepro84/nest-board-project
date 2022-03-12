@@ -15,7 +15,6 @@ import {
   LoggerService,
   UseFilters,
 } from '@nestjs/common';
-import { UsersService } from '../users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -34,7 +33,6 @@ import { VerifyEmailCommand } from '../application/command/verify-email.command'
 export class UsersController {
   constructor(
     private readonly authService: AuthService,
-    private readonly usersService: UsersService,
     private commandBus: CommandBus,
     private queryBus: QueryBus,
     @Inject(Logger) private readonly logger: LoggerService,
@@ -94,7 +92,7 @@ export class UsersController {
 
   @Delete('/:id')
   removeUser(@Param('id') userId: number) {
-    return this.usersService.removeUser(userId);
+    // return this.usersService.removeUser(userId);
   }
 
   @UseGuards(AuthGuard)
