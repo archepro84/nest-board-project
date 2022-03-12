@@ -22,7 +22,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { UserInfo } from './user-info';
 import { AuthGuard } from '../../../auth/auth.guard';
 import { UserData, UserRoles } from '../../../utils/decorators/users-transform';
-import { HttpExceptionFilter } from '../../../common/filters/http-exception.filter';
+import { HttpExceptionFilter } from '../../../exception/http-exception.filter';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/command/create-user.command';
 import { GetUserInfoQuery } from '../application/query/get-user-info.query';
