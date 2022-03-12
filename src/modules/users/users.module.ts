@@ -3,7 +3,6 @@ import { UsersService } from './users.service';
 import { UsersController } from './interface/users.controller';
 import { EmailModule } from '../../common/email/email.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersRepository } from './users.repository';
 import { AuthModule } from '../../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { HandlerRolesGuard } from './users.guard';
@@ -48,7 +47,7 @@ const queryHandlers = [GetUserInfoQueryHandler];
 @Module({
   imports: [
     EmailModule,
-    TypeOrmModule.forFeature([UsersRepository, UserEntity]),
+    TypeOrmModule.forFeature([UserEntity]),
     AuthModule,
     CqrsModule,
   ],
