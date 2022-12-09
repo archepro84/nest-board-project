@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class LoggerInterceptor implements NestInterceptor {
+export class LoggingInterceptor implements NestInterceptor {
   constructor(private logger: Logger) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
