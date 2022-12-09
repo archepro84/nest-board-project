@@ -9,7 +9,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
 import { validationSchema } from './config/validationSchema';
-import emailConfig from './config/emailConfig';
+// import emailConfig from './config/emailConfig';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   Logger2Middleware,
@@ -31,7 +31,8 @@ const configModuleOption: ConfigModuleOptions = {
       process.env.NODE_ENV ? process.env.NODE_ENV : 'development'
     }.env`,
   ],
-  load: [emailConfig, authConfig],
+  // load: [emailConfig, authConfig],
+  load: [authConfig],
   isGlobal: true,
   validationSchema,
 };

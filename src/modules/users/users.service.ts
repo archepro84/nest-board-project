@@ -17,7 +17,7 @@ import { UserInfo } from './user-info';
 @Injectable()
 export class UsersService {
   constructor(
-    private emailService: EmailService,
+    // private emailService: EmailService,
     @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
     private authService: AuthService,
   ) {}
@@ -51,10 +51,10 @@ export class UsersService {
     email: string,
     signupVerifyToken: string,
   ): Promise<void> {
-    await this.emailService.sendMemberJoinVerification(
-      email,
-      signupVerifyToken,
-    );
+    // await this.emailService.sendMemberJoinVerification(
+    //   email,
+    //   signupVerifyToken,
+    // );
   }
 
   async checkUserExists(emailAddress: string): Promise<boolean> {
